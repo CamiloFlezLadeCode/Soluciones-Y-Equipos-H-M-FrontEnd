@@ -1,0 +1,26 @@
+# COMMAND PARA CORRER DOCKER
+# docker-compose up --build
+# NOTA: El docker desktop debe estar corriendo/abierto
+# PARA REALIZAR REBUILDER
+# docker-compose down -v
+# docker-compose up --build
+
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./
+    container_name: react_app
+    ports:
+      - "3010:80"
+    restart: always
+
+
+
+# services:
+#   frontend:
+#     build:
+#       context: .
+#     ports:
+#       - "3000:80"    
