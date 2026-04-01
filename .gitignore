@@ -25,3 +25,6 @@ dist-ssr
 
 # Ignore .env
 .env
+
+# Ignore .nvmrc
+.nvmrc
