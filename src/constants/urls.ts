@@ -1,0 +1,4 @@
+export const URLS = {
+    DEVELOPER_WEBSITE: import.meta.env.VITE_URL_PAGINA_DESARROLLADOR_PRINCIPAL,
+    API_BASE_URL: import.meta.env.VITE_URL_BASE_BACKEND,
+}
