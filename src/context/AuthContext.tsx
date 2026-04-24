@@ -1,4 +1,3 @@
-// src/contexts/AuthContext.tsx
 import React, { createContext, useState, useEffect } from 'react'
 import type { ReactNode } from 'react'
 import { authService } from '@services/api/auth.service'
@@ -8,7 +7,7 @@ interface AuthContextType {
     user: User | null
     isLoading: boolean
     isAuthenticated: boolean
-    login: (credentials: LoginRequest) => Promise<User>
+    login: (credentials: LoginRequest) => Promise<User | null>
     logout: () => void
     checkAuth: () => Promise<void>
 }
@@ -41,10 +40,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }
     }
 
-    const login = async (credentials: LoginRequest): Promise<User> => {
-        const userData = await authService.login(credentials)
-        setUser(userData)
-        return userData
+    const login = async (credentials: LoginRequest): Promise<User | null> => {
+        await authService.login(credentials)
+        const currentUser = authService.getCurrentUser()
+        setUser(currentUser)
+        return currentUser
     }
 
     const logout = () => {

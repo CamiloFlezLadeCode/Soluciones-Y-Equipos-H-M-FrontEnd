@@ -9,3 +9,10 @@ export const textFieldStyles = {
     '&.Mui-focused fieldset': { border: 'none' },
     '& .MuiOutlinedInput-input': { py: 1.2 },
 } as const;
+
+export const textFieldLabelStyles = {
+    '& .MuiInputLabel-root.MuiInputLabel-shrink': {
+        transform: 'translate(14px, -18px) scale(0.85)',
+        transformOrigin: 'top left',
+    },
+} as const;

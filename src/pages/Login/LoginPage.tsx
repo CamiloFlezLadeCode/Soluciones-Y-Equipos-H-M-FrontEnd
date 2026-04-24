@@ -231,7 +231,7 @@ import logo from '../../assets/logo_company.png';
 import { useLogin } from '../../hooks/useLogin';
 import { openInNewTab } from '../../utils/navigation';
 import { URLS } from '../../constants/urls';
-import { textFieldStyles } from './LoginPage.styles';
+import { textFieldLabelStyles, textFieldStyles } from './LoginPage.styles';
 
 export default function LoginPage() {
     const { register, onSubmit, errors } = useLogin();
@@ -287,6 +287,7 @@ export default function LoginPage() {
                             variant="outlined"
                             error={!!errors.email}
                             helperText={errors.email?.message}
+                            sx={textFieldLabelStyles}
                             InputProps={{ sx: textFieldStyles }}
                         />
 
@@ -300,6 +301,7 @@ export default function LoginPage() {
                             variant="outlined"
                             error={!!errors.password}
                             helperText={errors.password?.message}
+                            sx={textFieldLabelStyles}
                             InputProps={{ sx: textFieldStyles }}
                         />
 

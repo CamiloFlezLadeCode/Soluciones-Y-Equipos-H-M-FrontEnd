@@ -7,6 +7,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import { notify } from '@services/notify';
+
 
 interface Column {
   id: 'name' | 'code' | 'population' | 'size' | 'density';
@@ -99,6 +101,12 @@ export default function DashboardPage() {
     setPage(0);
   };
 
+
+  // const notify = () => toast.success('Here is your toastsss.');
+  const showNotification = () => {
+    notify({ type: 'loading', message: 'Settings saved!' });
+  }
+
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: { xs: 5, sm: 10 } }}>
       <TableContainer sx={{ maxHeight: 440 }}>
@@ -147,7 +155,10 @@ export default function DashboardPage() {
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
+
+      <div>
+        <button onClick={showNotification}>Make me a toast</button>
+      </div>
     </Paper>
   );
 }
-

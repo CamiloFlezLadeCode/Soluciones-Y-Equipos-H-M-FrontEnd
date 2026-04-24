@@ -1,11 +1,16 @@
+import { createElement, type ReactElement } from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
+import { authService } from '@services/api/auth.service';
 
-export default function ProtectedRoute({ children }: { children: JSX.Element }) {
-    const { isAuthenticated } = useAuth();
+interface ProtectedRouteProps {
+    children: ReactElement
+}
 
-    if (!isAuthenticated) {
-        return <Navigate to="/login" replace />;
+export default function ProtectedRoute({ children }: ProtectedRouteProps) {
+    const hasValidSession = authService.isAuthenticated();
+
+    if (!hasValidSession) {
+        return createElement(Navigate, { to: '/login', replace: true });
     }
 
     return children;

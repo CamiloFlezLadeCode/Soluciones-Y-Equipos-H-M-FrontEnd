@@ -1,44 +1,12 @@
-// import { useForm } from 'react-hook-form';
-// import { zodResolver } from '@hookform/resolvers/zod';
-// import { loginSchema } from '@pages/Login/loginSchema';
-// import type { LoginFormData } from '@pages/Login/loginSchema';
-
-// export const useLogin = () => {
-//     const {
-//         register,
-//         handleSubmit,
-//         formState: { errors },
-//     } = useForm<LoginFormData>({
-//         resolver: zodResolver(loginSchema),
-//         defaultValues: {
-//             email: '',
-//             password: '',
-//         },
-//     });
-
-//     const onSubmit = handleSubmit((data) => {
-//         console.log('Datos del login:', data);
-//         alert('Iniciando sesión...');
-//         // Aquí iría la lógica de autenticación
-//     });
-
-//     return {
-//         register,
-//         onSubmit,
-//         errors,
-//     };
-// };
-
-
-// src/hooks/useLogin.ts
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { loginSchema } from '@pages/Login/loginSchema';
 import type { LoginFormData } from '@pages/Login/loginSchema';
+import { loginSchema } from '@pages/Login/loginSchema';
 import { authService } from '@services/api/auth.service';
 import type { LoginRequest } from '@services/api/types';
-import { useNavigate , redirect } from 'react-router-dom';
+import { notify } from '@services/notify';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
 export const useLogin = () => {
     const [loading, setLoading] = useState(false);
@@ -73,6 +41,11 @@ export const useLogin = () => {
             const user = await authService.login(credentials);
 
             console.log('Login exitoso:', user);
+            notify({
+                message: 'Iniciaste sesión exitosamente',
+                type: 'success',
+                position: 'top-center',
+            });
 
             // Redirigir al dashboard o página principal
             // window.location.href = '/dashboard';
@@ -85,11 +58,17 @@ export const useLogin = () => {
             const message = err instanceof Error ? err.message : 'Error al iniciar sesión';
             setApiError(message);
 
+            notify({
+                message: 'Usuario o contraseña incorrectos',
+                type: 'error',
+                position: 'top-center',
+            });
+
             // Opcional: Mapear errores específicos a campos del formulario
             if (message.includes('usuario') || message.includes('credenciales')) {
                 setError('email', {
                     type: 'manual',
-                    message: 'Usuario o contraseña incorrectos'
+                    message: 'Usuario o contraseña incorrectos',
                 });
             }
 

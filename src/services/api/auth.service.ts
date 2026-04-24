@@ -1,6 +1,6 @@
 import { authApi } from '@services/api/endpoints'
 import { apiClient } from '@services/api/client'
-import type { LoginRequest, LoginResponse } from '@services/api/types'
+import type { LoginRequest, LoginResponse, User } from '@services/api/types'
 
 class AuthService {
     async login(credentials: LoginRequest): Promise<LoginResponse> {
@@ -9,9 +9,6 @@ class AuthService {
         if (response.status === 'Success' && response.data) {
             // Guardar token en el cliente
             apiClient.setToken(response.data ?? null)
-
-            // Guardar usuario en localStorage (opcional)
-            localStorage.setItem('user', JSON.stringify(response.data))
 
             return response.data
         }
@@ -39,6 +36,18 @@ class AuthService {
             return payload.exp > Date.now() / 1000
         } catch {
             return false
+        }
+    }
+
+    getCurrentUser(): User | null {
+        const token = this.getToken()
+        if (!token) return null
+
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1]))
+            return payload?.usuario ?? null
+        } catch {
+            return null
         }
     }
 }

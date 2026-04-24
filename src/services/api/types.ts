@@ -28,3 +28,11 @@ export interface ErrorResponse {
     code: number
     message: string
 }
+
+export type User = {
+    usuId: number
+    usuDocumento: string
+    usuNombres: string
+    usuApellidos: string
+    usuCorreo: string
+}
