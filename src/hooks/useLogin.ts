@@ -38,9 +38,8 @@ export const useLogin = () => {
             };
 
             // Llamar al servicio de autenticación
-            const user = await authService.login(credentials);
+            await authService.login(credentials);
 
-            console.log('Login exitoso:', user);
             notify({
                 message: 'Iniciaste sesión exitosamente',
                 type: 'success',
