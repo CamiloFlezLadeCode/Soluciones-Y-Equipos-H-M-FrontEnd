@@ -49,7 +49,7 @@ export const useLogin = () => {
 
             // Redirigir al dashboard o página principal
             // window.location.href = '/dashboard';
-            navigate('/dashboard');
+            navigate('/app/dashboard');
             // Navigate('/dashboard');
 
 

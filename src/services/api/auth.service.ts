@@ -19,7 +19,6 @@ class AuthService {
     logout(): void {
         apiClient.clearToken()
         localStorage.removeItem('user')
-        window.location.href = '/login'
     }
 
     getToken(): string | null {

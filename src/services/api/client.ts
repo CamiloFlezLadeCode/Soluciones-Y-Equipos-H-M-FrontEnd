@@ -3,6 +3,8 @@ import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { API_CONFIG } from '@config/api.config'
 import type { ApiResponse } from './types'
 
+const AUTH_CHANGED_EVENT = 'auth:session-changed'
+
 class ApiClient {
     private client: AxiosInstance
     private token: string | null = null
@@ -39,7 +41,6 @@ class ApiClient {
                 if (error.response?.status === 401) {
                     // Token expirado
                     this.clearToken()
-                    window.location.href = '/login'
                 }
                 return Promise.reject(error)
             }
@@ -49,6 +50,7 @@ class ApiClient {
     setToken(token: string | null) {
         this.token = token
         localStorage.setItem('auth_token', token || '')
+        window.dispatchEvent(new Event(AUTH_CHANGED_EVENT))
     }
 
     getToken(): string | null {
@@ -58,6 +60,7 @@ class ApiClient {
     clearToken() {
         this.token = null
         localStorage.removeItem('auth_token')
+        window.dispatchEvent(new Event(AUTH_CHANGED_EVENT))
     }
 
     async request<T = any>(config: AxiosRequestConfig): Promise<ApiResponse<T>> {

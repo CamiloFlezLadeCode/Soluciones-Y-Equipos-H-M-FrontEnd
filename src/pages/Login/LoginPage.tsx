@@ -10,6 +10,7 @@
 // import { z } from 'zod';
 // import { useForm } from 'react-hook-form';
 // import { zodResolver } from '@hookform/resolvers/zod';
+// import { Link as RouterLink } from 'react-router-dom';
 // import { useLogin } from '../../hooks/useLogin';
 // import { URLS } from '../../constants/urls';
 // import { openInNewTab } from '../../utils/navigation';
@@ -223,10 +224,14 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
 import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { Eye, EyeOff } from 'lucide-react';
+import { useState } from 'react';
 import logo from '../../assets/logo_company.png';
 import { useLogin } from '../../hooks/useLogin';
 import { openInNewTab } from '../../utils/navigation';
@@ -235,6 +240,7 @@ import { textFieldLabelStyles, textFieldStyles } from './LoginPage.styles';
 
 export default function LoginPage() {
     const { register, onSubmit, errors } = useLogin();
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleDeveloperClick = () => {
         openInNewTab(URLS.DEVELOPER_WEBSITE);
@@ -293,7 +299,7 @@ export default function LoginPage() {
 
                         <TextField
                             label="Contraseña"
-                            type="password"
+                            type={showPassword ? 'text' : 'password'}
                             fullWidth
                             {...register('password')}
                             autoComplete="current-password"
@@ -302,7 +308,23 @@ export default function LoginPage() {
                             error={!!errors.password}
                             helperText={errors.password?.message}
                             sx={textFieldLabelStyles}
-                            InputProps={{ sx: textFieldStyles }}
+                            InputProps={{
+                                sx: textFieldStyles,
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            onClick={() => setShowPassword((prev) => !prev)}
+                                            onMouseDown={(event) => event.preventDefault()}
+                                            edge="end"
+                                            size="small"
+                                            aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                                            sx={{ mr: 0.2, color: 'rgba(63, 46, 101, 0.7)' }}
+                                        >
+                                            {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
                         />
 
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1.5 }}>

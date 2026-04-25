@@ -36,10 +36,11 @@ export const AppToaster = () => (
     <Toaster
         position={DEFAULT_POSITION}
         toastOptions={{
-            duration: 3500,
+            // duration: 3500,
             style: {
                 borderRadius: '10px',
                 fontSize: '14px',
+                fontWeight: 'bold',
             },
         }}
     />

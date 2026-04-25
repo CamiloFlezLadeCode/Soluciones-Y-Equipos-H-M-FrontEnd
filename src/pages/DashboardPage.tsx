@@ -1,164 +1,210 @@
-import React, { type MouseEvent } from 'react';
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import { notify } from '@services/notify';
-
+import type { MouseEvent } from 'react'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import Chip from '@mui/material/Chip'
+import Paper from '@mui/material/Paper'
+import Table from '@mui/material/Table'
+import TableBody from '@mui/material/TableBody'
+import TableCell from '@mui/material/TableCell'
+import TableContainer from '@mui/material/TableContainer'
+import TableHead from '@mui/material/TableHead'
+import TablePagination from '@mui/material/TablePagination'
+import TableRow from '@mui/material/TableRow'
+import Typography from '@mui/material/Typography'
+import { alpha } from '@mui/material/styles'
+import { useMemo, useState } from 'react'
+import { notify } from '@services/notify'
 
 interface Column {
-  id: 'name' | 'code' | 'population' | 'size' | 'density';
-  label: string;
-  minWidth?: number;
-  align?: 'right';
-  format?: (value: number) => string;
+    id: 'nombre' | 'rol' | 'estado' | 'ultimoAcceso'
+    label: string
+}
+
+interface Data {
+    nombre: string
+    rol: string
+    estado: string
+    ultimoAcceso: string
+}
+
+const palette = {
+    orange: '#FF7F00',
+    purple: '#3F2E65',
+    lightWarmGray: '#f6f2f7',
+    gray: '#eceaee',
+    whiteBase: '#fbf9fb',
 }
 
 const columns: readonly Column[] = [
-  { id: 'name', label: 'Name', minWidth: 170 },
-  { id: 'code', label: 'ISO\u00a0Code', minWidth: 100 },
-  {
-    id: 'population',
-    label: 'Population',
-    minWidth: 170,
-    align: 'right',
-    format: (value: number) => value.toLocaleString('en-US'),
-  },
-  {
-    id: 'size',
-    label: 'Size\u00a0(km\u00b2)',
-    minWidth: 170,
-    align: 'right',
-    format: (value: number) => value.toLocaleString('en-US'),
-  },
-  {
-    id: 'density',
-    label: 'Density',
-    minWidth: 170,
-    align: 'right',
-    format: (value: number) => value.toFixed(2),
-  },
-];
+    { id: 'nombre', label: 'Nombre' },
+    { id: 'rol', label: 'Rol' },
+    { id: 'estado', label: 'Estado' },
+    { id: 'ultimoAcceso', label: 'Ultimo acceso' },
+]
 
-interface Data {
-  name: string;
-  code: string;
-  population: number;
-  size: number;
-  density: number;
-}
+const rows: readonly Data[] = [
+    { nombre: 'Ana Ruiz', rol: 'Administrador', estado: 'Activo', ultimoAcceso: 'Hoy, 08:41' },
+    { nombre: 'Carlos Perez', rol: 'Operador', estado: 'Activo', ultimoAcceso: 'Hoy, 07:55' },
+    { nombre: 'Laura Mejia', rol: 'Supervisor', estado: 'Inactivo', ultimoAcceso: 'Ayer, 18:12' },
+    { nombre: 'Andres Silva', rol: 'Operador', estado: 'Activo', ultimoAcceso: 'Hoy, 09:04' },
+    { nombre: 'Julian Gomez', rol: 'Analista', estado: 'Activo', ultimoAcceso: 'Hoy, 08:17' },
+]
 
-function createData(
-  name: string,
-  code: string,
-  population: number,
-  size: number,
-): Data {
-  const density = population / size;
-  return { name, code, population, size, density };
-}
-
-const rows = [
-  createData('India', 'IN', 1324171354, 3287263),
-  createData('China', 'CN', 1403500365, 9596961),
-  createData('Italy', 'IT', 60483973, 301340),
-  createData('United States', 'US', 327167434, 9833520),
-  createData('Canada', 'CA', 37602103, 9984670),
-  createData('Australia', 'AU', 25475400, 7692024),
-  createData('Germany', 'DE', 83019200, 357578),
-  createData('Ireland', 'IE', 4857000, 70273),
-  createData('Mexico', 'MX', 126577691, 1972550),
-  createData('Japan', 'JP', 126317000, 377973),
-  createData('France', 'FR', 67022000, 640679),
-  createData('United Kingdom', 'GB', 67545757, 242495),
-  createData('Russia', 'RU', 146793744, 17098246),
-  createData('Nigeria', 'NG', 200962417, 923768),
-  createData('Brazil', 'BR', 210147125, 8515767),
-];
+const metrics = [
+    { title: 'Usuarios Activos', value: '128', trend: '+8.4%' },
+    { title: 'Tareas Pendientes', value: '42', trend: '-3.1%' },
+    { title: 'Eficiencia', value: '96.2%', trend: '+1.6%' },
+]
 
 export default function DashboardPage() {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [page, setPage] = useState(0)
+    const [rowsPerPage, setRowsPerPage] = useState(5)
 
-  // const handleChangePage = (event: ChangeEvent<unknown>, newPage: number) => {
-  //   event.preventDefault();
-  //   setPage(newPage);
-  // };
+    const paginatedRows = useMemo(
+        () => rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
+        [page, rowsPerPage]
+    )
 
-  const handleChangePage = (event: MouseEvent<HTMLButtonElement> | null, newPage: number) => {
-    if (event) {
-      event.preventDefault();
+    const handleChangePage = (event: MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+        if (event) event.preventDefault()
+        setPage(newPage)
     }
-    setPage(newPage);
-  };
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRowsPerPage(Number(event.target.value))
+        setPage(0)
+    }
 
-
-  // const notify = () => toast.success('Here is your toastsss.');
-  const showNotification = () => {
-    notify({ type: 'loading', message: 'Settings saved!' });
-  }
-
-  return (
-    <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: { xs: 5, sm: 10 } }}>
-      <TableContainer sx={{ maxHeight: 440 }}>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth }}
+    return (
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
+            <Box
+                sx={{
+                    p: { xs: 2, md: 3 },
+                    borderRadius: 4,
+                    backgroundColor: alpha('#ffffff', 0.92),
+                    backdropFilter: 'blur(10px)',
+                    border: `1px solid ${alpha(palette.purple, 0.14)}`,
+                    boxShadow: `0 16px 30px ${alpha(palette.purple, 0.12)}`,
+                }}
+            >
+                <Typography variant="h5" sx={{ fontWeight: 800, color: palette.purple }}>
+                    Bienvenido al Panel Administrativo
+                </Typography>
+                <Typography variant="body1" sx={{ mt: 0.8, color: alpha(palette.purple, 0.82) }}>
+                    Vista principal de operaciones y monitoreo de tu plataforma.
+                </Typography>
+                <Button
+                    sx={{
+                        mt: 2,
+                        textTransform: 'none',
+                        fontWeight: 800,
+                        color: palette.whiteBase,
+                        backgroundColor: palette.orange,
+                        '&:hover': { backgroundColor: '#d96800' },
+                    }}
+                    onClick={() => notify({ type: 'success', message: 'Panel actualizado correctamente.' })}
                 >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => {
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                    {columns.map((column) => {
-                      const value = row[column.id];
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === 'number'
-                            ? column.format(value)
-                            : value}
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                );
-              })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
-        component="div"
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
+                    Actualizar panel
+                </Button>
+            </Box>
 
-      <div>
-        <button onClick={showNotification}>Make me a toast</button>
-      </div>
-    </Paper>
-  );
+            <Box
+                sx={{
+                    display: 'grid',
+                    gridTemplateColumns: { xs: '1fr', md: 'repeat(3, minmax(0, 1fr))' },
+                    gap: 2,
+                }}
+            >
+                {metrics.map((metric) => (
+                    <Paper
+                        key={metric.title}
+                        elevation={0}
+                        sx={{
+                            p: 2.2,
+                            borderRadius: 3,
+                            backgroundColor: alpha('#ffffff', 0.9),
+                            border: `1px solid ${alpha(palette.purple, 0.12)}`,
+                            boxShadow: `0 8px 18px ${alpha(palette.purple, 0.08)}`,
+                        }}
+                    >
+                        <Typography variant="body2" sx={{ color: alpha(palette.purple, 0.72) }}>
+                            {metric.title}
+                        </Typography>
+                        <Typography variant="h4" sx={{ mt: 0.4, fontWeight: 800, color: palette.purple }}>
+                            {metric.value}
+                        </Typography>
+                        <Typography variant="caption" sx={{ color: palette.orange, fontWeight: 700 }}>
+                            {metric.trend}
+                        </Typography>
+                    </Paper>
+                ))}
+            </Box>
+
+            <Paper
+                elevation={0}
+                sx={{
+                    overflow: 'hidden',
+                    borderRadius: 3,
+                    backgroundColor: alpha('#ffffff', 0.93),
+                    border: `1px solid ${alpha(palette.purple, 0.12)}`,
+                }}
+            >
+                <TableContainer>
+                    <Table aria-label="usuarios">
+                        <TableHead>
+                            <TableRow>
+                                {columns.map((column) => (
+                                    <TableCell
+                                        key={column.id}
+                                        sx={{
+                                            color: palette.purple,
+                                            fontWeight: 700,
+                                            backgroundColor: alpha(palette.gray, 0.92),
+                                        }}
+                                    >
+                                        {column.label}
+                                    </TableCell>
+                                ))}
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {paginatedRows.map((row) => (
+                                <TableRow key={`${row.nombre}-${row.rol}`} hover>
+                                    <TableCell>{row.nombre}</TableCell>
+                                    <TableCell>{row.rol}</TableCell>
+                                    <TableCell>
+                                        <Chip
+                                            label={row.estado}
+                                            size="small"
+                                            sx={{
+                                                fontWeight: 700,
+                                                backgroundColor:
+                                                    row.estado === 'Activo'
+                                                        ? alpha('#2e7d32', 0.15)
+                                                        : alpha('#a32727', 0.12),
+                                                color:
+                                                    row.estado === 'Activo'
+                                                        ? '#1f5c24'
+                                                        : '#8f1e1e',
+                                            }}
+                                        />
+                                    </TableCell>
+                                    <TableCell>{row.ultimoAcceso}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                <TablePagination
+                    rowsPerPageOptions={[5, 10]}
+                    component="div"
+                    count={rows.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+            </Paper>
+        </Box>
+    )
 }
