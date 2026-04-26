@@ -19,6 +19,8 @@ export default defineConfig({
       '@routes': path.resolve(__dirname, 'src/routes'),
       '@services': path.resolve(__dirname, 'src/services'),
       '@utils': path.resolve(__dirname, 'src/utils'),
+      '@paths': path.resolve(__dirname, 'src/paths.ts'),
+      '@icons': path.resolve(__dirname, 'src/icon-sidebar.ts'),
     }
   }
 })

@@ -59,6 +59,12 @@
       ],
       "@utils/*": [
         "src/utils/*"
+      ],
+      "@paths": [
+        "src/paths.ts"
+      ],
+      "@icons": [
+        "src/icon-sidebar.ts"
       ]
     }
   },

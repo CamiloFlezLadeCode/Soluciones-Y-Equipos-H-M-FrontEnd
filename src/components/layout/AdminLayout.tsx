@@ -9,7 +9,8 @@ import Toolbar from '@mui/material/Toolbar'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
-import { useEffect, useMemo, useState } from 'react'
+import { pathsNavItems } from '@paths'
+import { authService } from '@services/api/auth.service'
 import {
     ChevronLeft,
     ChevronRight,
@@ -17,23 +18,17 @@ import {
     Menu,
     Moon,
     Sun,
-    type LucideIcon,
     UserRound,
 } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
-import { authService } from '@services/api/auth.service'
 
 const expandedDrawerWidth = 244
 const collapsedDrawerWidth = 64
 const themeStorageKey = 'hym-theme-mode'
 
-interface NavItem {
-    label: string
-    to: string
-    icon: LucideIcon
-}
 
-const navItems: NavItem[] = [{ label: 'Dashboard', to: '/app/dashboard', icon: LayoutDashboard }, { label: 'Users', to: '/app/users', icon: UserRound }, { label: 'Settings', to: '/app/settings', icon: Moon }]
+const navItems = pathsNavItems
 
 export default function AdminLayout() {
     const [mobileOpen, setMobileOpen] = useState(false)
@@ -398,7 +393,7 @@ export default function AdminLayout() {
                     display: { xs: 'none', md: 'block' },
                     width: sidebarWidth,
                     flexShrink: 0,
-                    transition: 'width 340ms cubic-bezier(0.22, 1, 0.36, 1)',
+                    transition: 'width 520ms cubic-bezier(0.22, 1, 0.36, 1)',
                     '& .MuiDrawer-paper': {
                         width: sidebarWidth,
                         boxSizing: 'border-box',
@@ -406,7 +401,7 @@ export default function AdminLayout() {
                         background: visual.drawerGradient,
                         boxShadow: visual.drawerShadow,
                         backdropFilter: 'blur(22px) saturate(160%)',
-                        transition: 'width 340ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 240ms ease',
+                        transition: 'width 520ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 240ms ease',
                         color: visual.textPrimary,
                         overflow: 'hidden',
                         '&:hover': {

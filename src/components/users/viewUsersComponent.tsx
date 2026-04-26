@@ -274,6 +274,7 @@ export default function ViewUsersComponent() {
                                 <MenuItem value="Administrador">Administrador</MenuItem>
                                 <MenuItem value="Operador">Operador</MenuItem>
                                 <MenuItem value="Consulta">Consulta</MenuItem>
+                                <MenuItem value="Cliente">Cliente</MenuItem>
                             </TextField>
 
                             <Button
