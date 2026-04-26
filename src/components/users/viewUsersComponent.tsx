@@ -22,7 +22,7 @@ import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-type UserRole = 'Administrador' | 'Operador' | 'Consulta'
+type UserRole = 'Administrador' | 'Operador' | 'Consulta' | 'Transportador' | 'Mecanico' | 'Cliente'
 type UserStatus = 'Activo' | 'Inactivo'
 
 interface AppUser {
@@ -49,7 +49,7 @@ const createUserSchema = z.object({
         .regex(/^[0-9]+$/, 'Solo se permiten numeros'),
     address: z.string().min(3, 'Dirección es obligatoria'),
     status: z.enum(['Activo', 'Inactivo']),
-    role: z.enum(['Administrador', 'Operador', 'Consulta']),
+    role: z.enum(['Administrador', 'Operador', 'Consulta', 'Transportador', 'Mecanico', 'Cliente']),
     phone: z.string().min(10, 'Telefono invalido').max(10, 'Telefono invalido').regex(/^[0-9]+$/, 'Solo se permiten numeros'),
 })
 
@@ -275,6 +275,8 @@ export default function ViewUsersComponent() {
                                 <MenuItem value="Operador">Operador</MenuItem>
                                 <MenuItem value="Consulta">Consulta</MenuItem>
                                 <MenuItem value="Cliente">Cliente</MenuItem>
+                                <MenuItem value="Transportador">Transportador</MenuItem>
+                                <MenuItem value="Mecanico">Mecánico</MenuItem>
                             </TextField>
 
                             <Button

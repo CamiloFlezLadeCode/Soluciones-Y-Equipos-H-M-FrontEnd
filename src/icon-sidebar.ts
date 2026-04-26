@@ -4,7 +4,8 @@ import {
     Toolbox,
     Drill,
     Settings,
-    Moon
+    Moon,
+    BadgeDollarSign
 } from 'lucide-react'
 
 const Icons = {
@@ -13,7 +14,8 @@ const Icons = {
     Configuracion: Settings,
     Equipos: Drill,
     Herramientas: Toolbox,
-    Luna: Moon
+    Luna: Moon,
+    Cotizaciones: BadgeDollarSign
 }
 
 export default Icons

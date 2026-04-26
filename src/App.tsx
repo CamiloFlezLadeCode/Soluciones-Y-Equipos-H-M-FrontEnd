@@ -7,6 +7,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import ViewUsersPage from '@pages/users/ViewUsersPage';
 import ViewEquipmentPage from '@pages/equipment/ViewEquipmentPage';
 import SettingsPage from '@pages/settings/SettingsPage';
+import QuotesPage from '@pages/quotes/QuotesPage';
 
 export default function App() {
   const hasValidSession = useAuthSession();
@@ -31,8 +32,10 @@ export default function App() {
         <Route index element={<Navigate to="/app/panel" replace />} />
         <Route path="panel" element={<DashboardPage />} />
         <Route path="usuarios" element={<ViewUsersPage />} />
-        <Route path="configuracion" element={<SettingsPage />} />
         <Route path="equipos" element={<ViewEquipmentPage />} />
+        <Route path="cotizaciones" element={<QuotesPage />} />
+
+        <Route path="configuracion" element={<SettingsPage />} />
       </Route>
 
 
