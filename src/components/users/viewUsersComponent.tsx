@@ -33,6 +33,8 @@ interface AppUser {
     role: UserRole
     status: UserStatus
     createdAt: string
+    address: string
+    phone: string
 }
 
 const usersStorageKey = 'hym-users-list'
@@ -45,7 +47,10 @@ const createUserSchema = z.object({
         .min(6, 'Documento invalido')
         .max(20, 'Documento invalido')
         .regex(/^[0-9]+$/, 'Solo se permiten numeros'),
+    address: z.string().min(3, 'Dirección es obligatoria'),
+    status: z.enum(['Activo', 'Inactivo']),
     role: z.enum(['Administrador', 'Operador', 'Consulta']),
+    phone: z.string().min(10, 'Telefono invalido').max(10, 'Telefono invalido').regex(/^[0-9]+$/, 'Solo se permiten numeros'),
 })
 
 type CreateUserFormData = z.infer<typeof createUserSchema>
@@ -59,6 +64,8 @@ const defaultUsers: AppUser[] = [
         role: 'Administrador',
         status: 'Activo',
         createdAt: '2026-03-10',
+        address: 'Calle 123, Ciudad X',
+        phone: '32012345678',
     },
     {
         id: 'usr-002',
@@ -68,6 +75,8 @@ const defaultUsers: AppUser[] = [
         role: 'Operador',
         status: 'Activo',
         createdAt: '2026-03-14',
+        address: 'Calle 456, Ciudad Y',
+        phone: '3204567890',
     },
 ]
 
@@ -98,6 +107,8 @@ export default function ViewUsersComponent() {
             email: '',
             document: '',
             role: 'Operador',
+            status: 'Activo',
+            address: '',
         },
     })
 
@@ -136,6 +147,8 @@ export default function ViewUsersComponent() {
             role: data.role,
             status: 'Activo',
             createdAt: new Date().toISOString().slice(0, 10),
+            address: data.address,
+            phone: data.phone,
         }
 
         persistUsers([newUser, ...users])
@@ -236,6 +249,20 @@ export default function ViewUsersComponent() {
                                 helperText={errors.document?.message}
                             />
                             <TextField
+                                label="Dirección"
+                                size="small"
+                                {...register('address')}
+                                error={!!errors.address}
+                                helperText={errors.address?.message}
+                            />
+                            <TextField
+                                label="Telefono"
+                                size="small"
+                                {...register('phone')}
+                                error={!!errors.phone}
+                                helperText={errors.phone?.message}
+                            />
+                            <TextField
                                 label="Rol"
                                 size="small"
                                 select
@@ -316,6 +343,8 @@ export default function ViewUsersComponent() {
                                             <TableCell>Documento</TableCell>
                                             <TableCell>Rol</TableCell>
                                             <TableCell>Estado</TableCell>
+                                            <TableCell>Dirección</TableCell>
+                                            <TableCell>Telefono</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -341,6 +370,8 @@ export default function ViewUsersComponent() {
                                                         <Typography sx={{ fontSize: '0.78rem' }}>{user.status}</Typography>
                                                     </Badge>
                                                 </TableCell>
+                                                <TableCell sx={{ fontSize: '0.8rem' }}>{user.address}</TableCell>
+                                                <TableCell sx={{ fontSize: '0.8rem' }}>{user.phone}</TableCell>
                                             </TableRow>
                                         ))}
                                     </TableBody>
